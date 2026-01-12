@@ -14,15 +14,20 @@ import Pagination from "@/components/Pagination/Pagination";
 import NoteList from "@/components/NoteList/NoteList";
 import Modal from "@/components/Modal/Modal";
 import NoteForm from "@/components/NoteForm/NoteForm";
+import { NoteTag } from "@/types/note";
 
-export default function NotesClient() {
+type NotesClientProps = {
+  tag?: NoteTag;
+};
+
+export default function NotesClient({ tag }: NotesClientProps) {
   const [searchText, setSearchText] = useState("");
   const [page, setPage] = useState(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const { data, isError, isLoading } = useQuery({
-    queryKey: ["fetchNotes", searchText, page],
-    queryFn: () => fetchNotes(searchText, page),
+    queryKey: ["fetchNotes", searchText, page, tag],
+    queryFn: () => fetchNotes({ searchText, page, tag }),
     placeholderData: keepPreviousData,
     refetchOnMount: false,
   });
